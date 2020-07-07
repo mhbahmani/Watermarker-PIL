@@ -74,15 +74,13 @@ for arg in args:
         elif argument == 'percents':
             height_scale_percent = value
 
-if image_file_path is None or image_file_path is '':
+if image_file_path is None or image_file_path == '':
     print('You didn\'t give image file path. I consume it as image.jpg')
-    image_file_path = "image.jpg"
+    image_file_path = "image.png"
 
-if logo_file_path is None or logo_file_path is '':
+if logo_file_path is None or logo_file_path == '':
     print('You didn\'t give logo file path. I consume it as logo.png')
     logo_file_path = "logo.png"
-
-
 
 
 im = Image.open('image.png')
@@ -95,4 +93,36 @@ im.paste(region, box)
 
 im.show()
 
+
+# Load image and watermark
+img = Image.open(image_file_path)
+logo = Image.open(logo_file_path)
+
+img_height, img_width= img.size
+
+logo_height, logo_width = logo.size
+
+width_scale_percent = (height_scale_percent * img_height * logo_width) / (img_width * logo_height)
+
+# Calculate new width and height of logo
+logo_width = int(img_width * width_scale_percent  / 100)
+logo_height = int(img_height * height_scale_percent / 100)
+
+# Calculate distance from image sides
+distance_from_bottom = int(img_height * distance_from_up_bottom_of_picture_percent / 100)
+distance_from_side = int(img_width * distance_from_sides_of_picture_percent / 100)
+
+
+print('Main Image: %s' % image_file_path)
+print('Watermark: %s' % logo_file_path)
+print('Watermark Location: %s %s' % ('Bottom' if bottom else 'Top', 'Left' if left else 'Right'))
+
+print('Watermark distance from %s: %d' % ('bottom' if bottom else 'top', distance_from_bottom))
+print('Watermark distance from %s: %d' % ('left' if left else 'right', distance_from_side))
+print('Image width: %d' % img_width)
+print('Image height: %d' % img_height)
+print('Watermark width: %d' % logo_width)
+print('Watermark height: %d' % logo_height)
+print('----------------------------------------------------------')
+print('Adding watermark to image...')
 
