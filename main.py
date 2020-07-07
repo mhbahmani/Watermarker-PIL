@@ -12,6 +12,9 @@ image_file_path = logo_file_path = None
 bottom = True
 left = True
 
+# Save flag
+save = False
+
 # percent of original size
 height_scale_percent = 6
 
@@ -21,7 +24,7 @@ distance_from_up_bottom_of_picture_percent = 5
 
 # Pars arguments
 try:
-    opts, args = getopt.getopt(args,"hi:l:p:r:u:",["image=", "logo=", "percents="])
+    opts, args = getopt.getopt(args,"hi:l:p:r:u:s",["image=", "logo=", "percents="])
 except getopt.GetoptError:
     print('Use `python main.py -h` to see how this code has to used.')
     sys.exit(2)
@@ -35,7 +38,9 @@ for opt, arg in opts:
         print('-p <watermark scale percents>')
         print('-r <distance from left or right >')
         print('-u <distance from up or bottom>')
+        print('-s')
         print('')
+        print('Use -s flag to save result')
         print('If you don\'t gave image path and watermark, script consume them by default as image.png and logo.png')
         print('With -p option, declare logo should be how many percents of the main image')
         print('By defalt, this value is 6%')
@@ -55,6 +60,8 @@ for opt, arg in opts:
         distance_from_sides_of_picture_percent = int(arg)
     elif opt in ("-u"):
         distance_from_up_bottom_of_picture_percent = int(arg)
+    elif opt in ("-s"):
+        save = True
 
 
 for arg in args:
@@ -90,7 +97,7 @@ def add_watermark():
     # Load image and watermark
     img = Image.open(image_file_path)
     logo = Image.open(logo_file_path)
-
+    
     img_width, img_height= img.size
     logo_width, logo_height = logo.size
     
@@ -124,9 +131,13 @@ def add_watermark():
     # Set watermark palce
     position = (logo_starting_width, logo_starting_height)
 
+    # Add watermark to base image
     img.paste(logo, position)
-    img.show()
 
+    if save:
+        img.save("output_image.png")
+    
+    img.show()
 
 if __name__ == '__main__':
     add_watermark()
