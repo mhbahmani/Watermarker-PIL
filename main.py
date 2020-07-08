@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from PIL import Image
+import os
 import sys, getopt
 import re
 
@@ -27,6 +28,14 @@ distance_from_sides_of_picture_percent = 5
 distance_from_up_bottom_of_picture_percent = 5
 
 images = list()
+
+
+def add_included_images_to_images_list(directory):
+    for root, directories, included_files in os.walk(directory):
+        for file in included_files:
+            if '.png' in file or '.jpg' in file or '.jpeg' in file:
+                images.append(os.path.join(root, file))
+
 
 # Pars arguments
 try:
@@ -66,8 +75,8 @@ for opt, arg in opts:
         distance_from_sides_of_picture_percent = int(arg)
     elif opt in ("-u"):
         distance_from_up_bottom_of_picture_percent = int(arg)
-    elif opt in ("-f"):
-        pass
+    elif opt in ("-r"):
+        add_included_images_to_images_list(directory=arg)
     elif opt in ("-s"):
         save = True
 
@@ -90,9 +99,7 @@ for arg in args:
         elif argument == 'percents':
             height_scale_percent = value
         elif argument == 'folder':
-            pass
-            # TODO: add all images in given folder to images list
-
+            add_included_images_to_images_list(directory=value)
 
 if not images:
     print('You didn\'t give image file path. I consume it as %s' % default_image_path)
