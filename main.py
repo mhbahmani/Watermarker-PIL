@@ -95,13 +95,16 @@ for arg in args:
 
 
 if not images:
-    print('You didn\'t give image file path. I consume it as image.png')
+    print('You didn\'t give image file path. I consume it as %s' % default_image_path)
     images.append(default_image_path)
 
 if logo_file_path is None or logo_file_path == '':
-    print('You didn\'t give logo file path. I consume it as logo.png')
+    print('You didn\'t give logo file path. I consume it as %s' % default_logo_path)
     logo_file_path = default_logo_path
 
+
+def get_absolute_image_name(image_file_path):
+    return re.search("\w+\.[a-z]+", image_file_path).group()
 
 
 def add_watermark(image_file_path):
@@ -146,10 +149,11 @@ def add_watermark(image_file_path):
     # Add watermark to base image
     img.paste(logo, position, mask=logo)
 
-    if save:
-        img.save("output_image.png")
-    
     img.show()
+    
+    if save:
+        img.save("output_%s" % get_absolute_image_name(img.filename))
+    
 
 if __name__ == '__main__':
     for image in images:
