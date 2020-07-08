@@ -8,7 +8,7 @@ import re
 
 args = sys.argv[1:]
 
-default_output_directory = "/home/%s/watermarker_outputs" % getpass.getuser()
+default_outputs_directory = f"/home/{getpass.getuser()}/watermarker_outputs"
 default_image_path = "image.png"
 default_logo_path = "logo.png"
 
@@ -103,11 +103,9 @@ for arg in args:
             add_included_images_to_images_list(directory=value)
 
 if not images:
-    print('You didn\'t give image file path. I consume it as %s' % default_image_path)
     images.append(default_image_path)
 
 if logo_file_path is None or logo_file_path == '':
-    print('You didn\'t give logo file path. I consume it as %s' % default_logo_path)
     logo_file_path = default_logo_path
 
 
@@ -115,8 +113,17 @@ def get_absolute_image_name(image_file_path):
     return re.search("\w+\.[a-z]+", image_file_path).group()
 
 def save(img: Image):
-    os.mkdir(default_output_directory)
-    img.save("%s/output_%s" % (default_output_directory, get_absolute_image_name(img.filename)))
+    image_filename = get_absolute_image_name(img.filename)
+    try:
+        os.mkdir(default_outputs_directory)
+    except FileExistsError:
+        [ os.remove(os.path.join(default_outputs_directory, file)) for file in os.listdir(default_outputs_directory) ]
+    print(f"{image_filename}: ", end="")
+    try:
+        img.save("%s/output_%s" % (default_outputs_directory, image_filename)) 
+    except OSError:
+        print("\033[91m{}\033[00m".format("Failed"))
+    print("\033[92m{}\033[00m" .format("Successfull"))
 
 def add_watermark(image_file_path):
 
