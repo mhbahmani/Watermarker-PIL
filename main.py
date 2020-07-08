@@ -132,7 +132,7 @@ def add_watermark():
     position = (logo_starting_width, logo_starting_height)
 
     # Add watermark to base image
-    img.paste(logo, position)
+    img.paste(logo, position, mask=logo)
 
     if save:
         img.save("output_image.png")
