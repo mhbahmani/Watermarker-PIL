@@ -6,7 +6,11 @@ import re
 
 args = sys.argv[1:]
 
-image_file_path = logo_file_path = None
+
+default_image_path = "image.png"
+default_logo_path = "logo.png"
+
+logo_file_path = None
 
 # Set default logo place, which is bottom left
 bottom = True
@@ -22,9 +26,11 @@ height_scale_percent = 6
 distance_from_sides_of_picture_percent = 5
 distance_from_up_bottom_of_picture_percent = 5
 
+images = list()
+
 # Pars arguments
 try:
-    opts, args = getopt.getopt(args,"hi:l:p:d:u:s",["image=", "logo=", "percents="])
+    opts, args = getopt.getopt(args,"hr:i:l:p:d:u:s",["folder=", "image=", "logo=", "percents="])
 except getopt.GetoptError:
     print('Use `python main.py -h` to see how this code has to used.')
     sys.exit(2)
@@ -51,7 +57,7 @@ for opt, arg in opts:
         print('Watermark palce is by default bottom and left')
         sys.exit()
     elif opt in ("-i", "--image"):
-        image_file_path = arg
+        images.append(arg)
     elif opt in ("-l", "--logo"):
         logo_file_path = arg
     elif opt in ("-p", "--percents"):
@@ -60,6 +66,8 @@ for opt, arg in opts:
         distance_from_sides_of_picture_percent = int(arg)
     elif opt in ("-u"):
         distance_from_up_bottom_of_picture_percent = int(arg)
+    elif opt in ("-f"):
+        pass
     elif opt in ("-s"):
         save = True
 
@@ -81,18 +89,22 @@ for arg in args:
             logo_file_path = value
         elif argument == 'percents':
             height_scale_percent = value
+        elif argument == 'folder':
+            pass
+            # TODO: add all images in given folder to images list
 
-if image_file_path is None or image_file_path == '':
+
+if not images:
     print('You didn\'t give image file path. I consume it as image.png')
-    image_file_path = "image.png"
+    images.append(default_image_path)
 
 if logo_file_path is None or logo_file_path == '':
     print('You didn\'t give logo file path. I consume it as logo.png')
-    logo_file_path = "logo.png"
+    logo_file_path = default_logo_path
 
 
 
-def add_watermark():
+def add_watermark(image_file_path):
 
     # Load image and watermark
     img = Image.open(image_file_path)
@@ -140,4 +152,5 @@ def add_watermark():
     img.show()
 
 if __name__ == '__main__':
-    add_watermark()
+    for image in images:
+        add_watermark(image)
