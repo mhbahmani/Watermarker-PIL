@@ -2,12 +2,13 @@
 
 from PIL import Image
 import os
-import sys, getopt
+import sys
+import getopt, getpass
 import re
 
 args = sys.argv[1:]
 
-
+default_output_directory = "/home/%s/watermarker_outputs" % getpass.getuser()
 default_image_path = "image.png"
 default_logo_path = "logo.png"
 
@@ -113,6 +114,9 @@ if logo_file_path is None or logo_file_path == '':
 def get_absolute_image_name(image_file_path):
     return re.search("\w+\.[a-z]+", image_file_path).group()
 
+def save(img: Image):
+    os.mkdir(default_output_directory)
+    img.save("%s/output_%s" % (default_output_directory, get_absolute_image_name(img.filename)))
 
 def add_watermark(image_file_path):
 
@@ -159,8 +163,7 @@ def add_watermark(image_file_path):
     img.show()
     
     if save:
-        img.save("output_%s" % get_absolute_image_name(img.filename))
-    
+        save(img)
 
 if __name__ == '__main__':
     for image in images:
