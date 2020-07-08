@@ -24,7 +24,7 @@ distance_from_up_bottom_of_picture_percent = 5
 
 # Pars arguments
 try:
-    opts, args = getopt.getopt(args,"hi:l:p:r:u:s",["image=", "logo=", "percents="])
+    opts, args = getopt.getopt(args,"hi:l:p:d:u:s",["image=", "logo=", "percents="])
 except getopt.GetoptError:
     print('Use `python main.py -h` to see how this code has to used.')
     sys.exit(2)
@@ -36,7 +36,7 @@ for opt, arg in opts:
         print('-i <image path>')
         print('-l <watermark path>')
         print('-p <watermark scale percents>')
-        print('-r <distance from left or right >')
+        print('-d <distance from left or right >')
         print('-u <distance from up or bottom>')
         print('-s')
         print('')
@@ -44,7 +44,7 @@ for opt, arg in opts:
         print('If you don\'t gave image path and watermark, script consume them by default as image.png and logo.png')
         print('With -p option, declare logo should be how many percents of the main image')
         print('By defalt, this value is 6%')
-        print('You can set logo distance from picture sides using -r')
+        print('You can set logo distance from picture sides using -d')
         print('You can set logo distance from up or bottom using -u')
         print('Default value for these are 5%')
         print('Use top, bottom, left and right key words to declare watermark place')
@@ -56,7 +56,7 @@ for opt, arg in opts:
         logo_file_path = arg
     elif opt in ("-p", "--percents"):
         height_scale_percent = int(arg)
-    elif opt in ("-r"):
+    elif opt in ("-d"):
         distance_from_sides_of_picture_percent = int(arg)
     elif opt in ("-u"):
         distance_from_up_bottom_of_picture_percent = int(arg)
