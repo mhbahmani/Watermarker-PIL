@@ -171,7 +171,7 @@ def add_watermark(image_file_path):
 
     img.show()
     
-    if save:
+    if save is True:
         save(img)
 
 if __name__ == '__main__':
