@@ -81,7 +81,7 @@ for opt, arg in opts:
     elif opt in ("-r"):
         add_included_images_to_images_list(directory=arg)
     elif opt in ("-s"):
-        save = True
+        save_flag = True
 
 
 for arg in args:
@@ -170,8 +170,8 @@ def add_watermark(image_file_path):
     img.paste(logo, position, mask=logo)
 
     img.show()
-    
-    if save is True:
+
+    if save_flag is True:
         save(img)
 
 if __name__ == '__main__':
